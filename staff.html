@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>当事業所の職員紹介</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --primary-color: #2a628f;
+      --secondary-color: #f8f8f8;
+      --accent-color: #f0b429;
+      --text-color: #2c2c2c;
+      --muted-color: #6c6c6c;
+      font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, rgba(42, 98, 143, 0.15), transparent 320px), var(--secondary-color);
+      color: var(--text-color);
+    }
+
+    header {
+      background-color: rgba(42, 98, 143, 0.92);
+      color: #fff;
+      padding: 40px 24px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(240, 180, 41, 0.25), transparent 55%),
+        radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.18), transparent 60%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 3vw + 1rem, 3rem);
+      margin: 0 0 12px;
+      letter-spacing: 0.08em;
+    }
+
+    header p {
+      margin: 0 auto;
+      max-width: 720px;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      opacity: 0.9;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .filter-button {
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .filter-button:hover,
+    .filter-button.is-active {
+      background-color: #fff;
+      color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: -48px auto 80px;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 18px 36px rgba(42, 98, 143, 0.12);
+      border: 1px solid rgba(42, 98, 143, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge {
+      align-self: flex-start;
+      background: linear-gradient(135deg, rgba(42, 98, 143, 0.12), rgba(42, 98, 143, 0.35));
+      color: var(--primary-color);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--primary-color);
+    }
+
+    .card dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      row-gap: 6px;
+      column-gap: 12px;
+      font-size: 0.95rem;
+    }
+
+    .card dt {
+      color: var(--muted-color);
+    }
+
+    .card blockquote {
+      margin: 12px 0 0;
+      padding: 16px 20px;
+      border-left: 4px solid var(--accent-color);
+      background-color: rgba(240, 180, 41, 0.12);
+      border-radius: 12px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .schedule {
+      margin-top: auto;
+      border-top: 1px solid rgba(42, 98, 143, 0.1);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .schedule strong {
+      font-size: 0.9rem;
+      color: var(--muted-color);
+      letter-spacing: 0.08em;
+    }
+
+    .schedule span {
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .floating-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42, 98, 143, 0.22), rgba(42, 98, 143, 0));
+      z-index: 0;
+    }
+
+    .floating-circle.circle-1 {
+      width: 180px;
+      height: 180px;
+      top: -60px;
+      right: -40px;
+    }
+
+    .floating-circle.circle-2 {
+      width: 140px;
+      height: 140px;
+      bottom: -70px;
+      left: -50px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 32px 18px 48px;
+      }
+
+      main {
+        margin-top: -36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="floating-circle circle-1" aria-hidden="true"></div>
+    <div class="floating-circle circle-2" aria-hidden="true"></div>
+    <h1>職員紹介</h1>
+    <p>
+      当事業所で活躍する職員をご紹介します。利用者さまに寄り添いながら、
+      一人ひとりの暮らしと自立を支える専門スタッフが在籍しています。
+    </p>
+    <div class="filters" aria-label="役職で絞り込む">
+      <button class="filter-button is-active" type="button">すべて</button>
+      <button class="filter-button" type="button">管理者</button>
+      <button class="filter-button" type="button">サービス提供責任者</button>
+      <button class="filter-button" type="button">生活支援員</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="職員カード一覧">
+      <article class="card" aria-labelledby="staff-1">
+        <span class="badge">管理者</span>
+        <h2 id="staff-1">田中 実</h2>
+        <dl>
+          <dt>担当</dt>
+          <dd>事業所全体の統括、スタッフ育成</dd>
+          <dt>資格</dt>
+          <dd>社会福祉士、介護支援専門員</dd>
+        </dl>
+        <blockquote>
+          「安心して働ける環境づくりが利用者さまの笑顔につながると信じています。」
+        </blockquote>
+        <div class="schedule">
+          <strong>主な勤務時間</strong>
+          <span>平日 9:00〜18:00</span>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="staff-2">
+        <span class="badge">サービス提供責任者</span>
+        <h2 id="staff-2">佐々木 愛</h2>
+        <dl>
+          <dt>担当</dt>
+          <dd>ケアプラン作成、利用者さまご家族との連携</dd>
+          <dt>資格</dt>
+          <dd>介護福祉士、認知症介護実践者研修修了</dd>
+        </dl>
+        <blockquote>
+          「小さな変化に気づき、寄り添いながら安心を届けるケアを心がけています。」
+        </blockquote>
+        <div class="schedule">
+          <strong>主な勤務時間</strong>
+          <span>平日 8:30〜17:30／土曜 交替制</span>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="staff-3">
+        <span class="badge">生活支援員</span>
+        <h2 id="staff-3">山本 翔太</h2>
+        <dl>
+          <dt>担当</dt>
+          <dd>生活支援、外出同行、レクリエーション企画</dd>
+          <dt>資格</dt>
+          <dd>介護職員初任者研修、ガイドヘルパー</dd>
+        </dl>
+        <blockquote>
+          「利用者さまの『やってみたい』を一緒に叶える時間が何よりの喜びです。」
+        </blockquote>
+        <div class="schedule">
+          <strong>主な勤務時間</strong>
+          <span>シフト制（早番 7:00〜16:00／遅番 11:00〜20:00）</span>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
